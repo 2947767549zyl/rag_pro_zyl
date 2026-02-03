@@ -174,6 +174,12 @@
                 <el-form-item label="端口" prop="dynamicConfig.serverPort">
                   <el-input v-model="form.dynamicConfig.serverPort" placeholder="端口"/>
                 </el-form-item>
+                <el-form-item label="拆包分隔符" prop="dynamicConfig.delimiter">
+                  <el-input v-model="form.dynamicConfig.delimiter" placeholder="拆包分隔符，默认\n\r"/>
+                </el-form-item>
+                <el-form-item label="缓冲区大小(byte)" prop="dynamicConfig.cacheSize">
+                  <el-input v-model="form.dynamicConfig.cacheSize" placeholder="缓冲区大小(byte)"/>
+                </el-form-item>
               </template>
 
               <!-- 默认配置 -->
@@ -380,8 +386,9 @@ export default {
         }
       } else if (netType === 'TCP_SERVER') {
         this.form.dynamicConfig = {
-          serverPort: ''
-        }
+          serverPort: '',
+          delimiter: '\\r,\\n',
+          cacheSize: '8192'
       }
     },
     /** 搜索按钮操作 */

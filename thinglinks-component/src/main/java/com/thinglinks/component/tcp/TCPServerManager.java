@@ -30,17 +30,17 @@ public class TCPServerManager {
     /**
      * 动态添加TCP服务器 - 静态方法
      */
-    public static boolean addServer(String id,int port, ServerHandler handler) {
-        return getInstance().addServerInstance(id,port, handler);
+    public static boolean addServer(String id,int port,String delimiter,Integer cacheSize, ServerHandler handler) {
+        return getInstance().addServerInstance(id,port,delimiter,cacheSize, handler);
     }
 
     /**
      * 实例方法 - 供静态方法内部调用
      */
-    private boolean addServerInstance(String id,int port, ServerHandler handler) {
+    private boolean addServerInstance(String id,int port,String delimiter,Integer cacheSize, ServerHandler handler) {
 
         try {
-            TCPServerInstance serverInstance = new TCPServerInstance(id,port, handler);
+            TCPServerInstance serverInstance = new TCPServerInstance(id,port,delimiter,cacheSize, handler);
             tcpServerInstanceMap.put(id,serverInstance);
             executor.execute(serverInstance);
             System.out.println("TCP服务器启动成功，端口: " + port);
@@ -59,7 +59,7 @@ public class TCPServerManager {
     }
 
     private boolean removeServerInstance(String id) {
-        TCPServerInstance server = tcpServerInstanceMap.get(id);;
+        TCPServerInstance server = tcpServerInstanceMap.get(id);
         if (server != null) {
             server.stop();
             tcpServerInstanceMap.remove(id);

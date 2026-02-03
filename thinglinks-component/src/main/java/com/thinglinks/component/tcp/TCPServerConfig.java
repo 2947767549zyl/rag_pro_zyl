@@ -10,4 +10,6 @@ import lombok.Data;
 @Data
 public class TCPServerConfig {
     private Integer serverPort;
+    private String delimiter;
+    private Integer cacheSize;
 }
