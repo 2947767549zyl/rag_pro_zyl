@@ -135,7 +135,7 @@ public class ThinglinksComponentServiceImpl extends ServiceImpl<ThinglinksCompon
                     if(!PortChecker.isLocalPortAvailable(config.getServerPort())){
                         throw new CommonWarnException("端口被占用");
                     }
-                    boolean isOk = TCPServerManager.addServer(component.getId(), config.getServerPort(), new TCPServerHandlerInstance());
+                    boolean isOk = TCPServerManager.addServer(component.getId(), config.getServerPort(),config.getDelimiter(),config.getCacheSize(), new TCPServerHandlerInstance());
                     if(!isOk){
                         throw new CommonWarnException("开启失败，请检查配置信息是否正确");
                     }
