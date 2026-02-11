@@ -125,14 +125,8 @@
           </el-form-item>
           <el-form-item label="网络类型" prop="protocolType" required>
             <el-select v-model="form.protocolType" placeholder="网络类型">
-              <el-option label="MQTT_BROKER" value="MQTT_BROKER"></el-option>
               <el-option label="MQTT_CLIENT" value="MQTT_CLIENT"></el-option>
               <el-option label="TCP_SERVER" value="TCP_SERVER"></el-option>
-              <el-option label="UDP_SERVER" value="UDP_SERVER"></el-option>
-              <el-option label="COAP_SERVER" value="COAP_SERVER"></el-option>
-              <el-option label="HTTP_SERVER" value="HTTP_SERVER"></el-option>
-              <el-option label="WEBSOCKET_SERVER" value="WEBSOCKET_SERVER"></el-option>
-              <el-option label="MODBUS_TCP" value="MODBUS_TCP"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="上传JAR包" prop="file">

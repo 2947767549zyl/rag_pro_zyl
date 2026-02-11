@@ -389,6 +389,7 @@ export default {
           serverPort: '',
           delimiter: '\\r,\\n',
           cacheSize: '8192'
+        }
       }
     },
     /** 搜索按钮操作 */
