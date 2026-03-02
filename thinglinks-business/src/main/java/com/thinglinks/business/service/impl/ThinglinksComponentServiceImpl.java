@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.alibaba.fastjson2.JSONObject;
 import com.thinglinks.business.mapper.ThinglinksProtocolMapper;
+import com.thinglinks.business.utils.CacheUtils;
 import com.thinglinks.common.exception.CommonWarnException;
 import com.thinglinks.common.utils.StringUtils;
 import com.thinglinks.component.mqtt.client.MqttClientConfig;
@@ -123,6 +124,7 @@ public class ThinglinksComponentServiceImpl extends ServiceImpl<ThinglinksCompon
                     component.setStatus("1");
                     component.setIpAddr(config.getBrokerUrl());
                     thinglinksComponentMapper.updateById(component);
+                    CacheUtils.setComponentCache(component.getId(),component);
                     return true;
                 }else {
                     return false;
@@ -146,6 +148,7 @@ public class ThinglinksComponentServiceImpl extends ServiceImpl<ThinglinksCompon
                     component.setIpAddr("0.0.0.0");
                     component.setPort(String.valueOf(config.getServerPort()));
                     thinglinksComponentMapper.updateById(component);
+                    CacheUtils.setComponentCache(component.getId(),component);
                     return true;
                 }else {
                     return false;
