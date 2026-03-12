@@ -20,5 +20,6 @@ public class ThingLinksApplication
         SpringApplication.run(ThingLinksApplication.class, args);
         System.out.println("(♥◠‿◠)ﾉﾞ  讯联平台启动成功   ლ(´ڡ`ლ)ﾞ");
         System.out.println("  (♥◠‿◠)ﾉﾞ   启动成功   ლ(´ڡ`ლ)ﾞ  ");
+        System.out.println("  (♥◠‿◠)ﾉﾞ   启动成功   ლ(´ڡ`ლ)ﾞ  ");
     }
 }
