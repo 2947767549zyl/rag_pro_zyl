@@ -11,6 +11,8 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
 import java.security.cert.X509Certificate;
+import java.util.HashMap;
+import java.util.Map;
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
@@ -24,58 +26,90 @@ import com.thinglinks.common.utils.StringUtils;
 import org.springframework.http.MediaType;
 
 /**
- * 通用http发送方法
- * 
+ * 通用http发送方法（支持自定义请求头）
+ *
  * @author thinglinks
  */
 public class HttpUtils
 {
+    // 1. Logger 放在最前面（编码规范）
     private static final Logger log = LoggerFactory.getLogger(HttpUtils.class);
 
+    // 2. 自定义请求头（实例变量，每个实例独立）
+    private Map<String, String> headers = new HashMap<>();
+
+    // 3. 添加请求头方法
+    public void addHeader(String key, String value) {
+        this.headers.put(key, value);
+    }
+
+    // ========== 静态方法（兼容原有调用，内部调用实例方法） ==========
     /**
-     * 向指定 URL 发送GET方法的请求
-     *
-     * @param url 发送请求的 URL
-     * @return 所代表远程资源的响应结果
+     * 向指定 URL 发送GET方法的请求（静态）
      */
     public static String sendGet(String url)
     {
         return sendGet(url, StringUtils.EMPTY);
     }
 
-    /**
-     * 向指定 URL 发送GET方法的请求
-     *
-     * @param url 发送请求的 URL
-     * @param param 请求参数，请求参数应该是 name1=value1&name2=value2 的形式。
-     * @return 所代表远程资源的响应结果
-     */
     public static String sendGet(String url, String param)
     {
         return sendGet(url, param, Constants.UTF8);
     }
 
-    /**
-     * 向指定 URL 发送GET方法的请求
-     *
-     * @param url 发送请求的 URL
-     * @param param 请求参数，请求参数应该是 name1=value1&name2=value2 的形式。
-     * @param contentType 编码类型
-     * @return 所代表远程资源的响应结果
-     */
     public static String sendGet(String url, String param, String contentType)
+    {
+        // 调用实例版doGet，复用逻辑
+        return new HttpUtils().doGet(url, param, contentType);
+    }
+
+    /**
+     * 向指定 URL 发送POST方法的请求（静态）
+     */
+    public static String sendPost(String url, String param)
+    {
+        return sendPost(url, param, MediaType.APPLICATION_FORM_URLENCODED_VALUE);
+    }
+
+    public static String sendPost(String url, String param, String contentType)
+    {
+        // 调用实例版doPost，复用逻辑
+        return new HttpUtils().doPost(url, param, contentType);
+    }
+
+    // ========== 实例方法（支持自定义请求头） ==========
+    /**
+     * 向指定 URL 发送GET方法的请求（实例版，支持自定义头）
+     */
+    public String doGet(String url) {
+        return doGet(url, StringUtils.EMPTY);
+    }
+
+    public String doGet(String url, String param) {
+        return doGet(url, param, Constants.UTF8);
+    }
+
+    public String doGet(String url, String param, String contentType)
     {
         StringBuilder result = new StringBuilder();
         BufferedReader in = null;
         try
         {
             String urlNameString = StringUtils.isNotBlank(param) ? url + "?" + param : url;
-            log.info("sendGet - {}", urlNameString);
+            log.info("doGet - {}", urlNameString);
             URL realUrl = new URL(urlNameString);
             URLConnection connection = realUrl.openConnection();
+
+            // 设置默认请求头
             connection.setRequestProperty("accept", "*/*");
             connection.setRequestProperty("connection", "Keep-Alive");
             connection.setRequestProperty("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64)");
+
+            // 添加自定义请求头
+            for (Map.Entry<String, String> entry : headers.entrySet()) {
+                connection.setRequestProperty(entry.getKey(), entry.getValue());
+            }
+
             connection.connect();
             in = new BufferedReader(new InputStreamReader(connection.getInputStream(), contentType));
             String line;
@@ -87,19 +121,19 @@ public class HttpUtils
         }
         catch (ConnectException e)
         {
-            log.error("调用HttpUtils.sendGet ConnectException, url=" + url + ",param=" + param, e);
+            log.error("调用HttpUtils.doGet ConnectException, url=" + url + ",param=" + param, e);
         }
         catch (SocketTimeoutException e)
         {
-            log.error("调用HttpUtils.sendGet SocketTimeoutException, url=" + url + ",param=" + param, e);
+            log.error("调用HttpUtils.doGet SocketTimeoutException, url=" + url + ",param=" + param, e);
         }
         catch (IOException e)
         {
-            log.error("调用HttpUtils.sendGet IOException, url=" + url + ",param=" + param, e);
+            log.error("调用HttpUtils.doGet IOException, url=" + url + ",param=" + param, e);
         }
         catch (Exception e)
         {
-            log.error("调用HttpsUtil.sendGet Exception, url=" + url + ",param=" + param, e);
+            log.error("调用HttpsUtil.doGet Exception, url=" + url + ",param=" + param, e);
         }
         finally
         {
@@ -119,40 +153,35 @@ public class HttpUtils
     }
 
     /**
-     * 向指定 URL 发送POST方法的请求
-     *
-     * @param url 发送请求的 URL
-     * @param param 请求参数，请求参数应该是 name1=value1&name2=value2 的形式。
-     * @return 所代表远程资源的响应结果
+     * 向指定 URL 发送POST方法的请求（实例版，支持自定义头）
      */
-    public static String sendPost(String url, String param)
-    {
-        return sendPost(url, param, MediaType.APPLICATION_FORM_URLENCODED_VALUE);
+    public String doPost(String url, String param) {
+        return doPost(url, param, MediaType.APPLICATION_FORM_URLENCODED_VALUE);
     }
 
-    /**
-     * 向指定 URL 发送POST方法的请求
-     * 
-     * @param url 发送请求的 URL
-     * @param param 请求参数
-     * @param contentType 内容类型
-     * @return 所代表远程资源的响应结果
-     */
-    public static String sendPost(String url, String param, String contentType)
+    public String doPost(String url, String param, String contentType)
     {
         PrintWriter out = null;
         BufferedReader in = null;
         StringBuilder result = new StringBuilder();
         try
         {
-            log.info("sendPost - {}", url);
+            log.info("doPost - {}", url);
             URL realUrl = new URL(url);
             URLConnection conn = realUrl.openConnection();
+
+            // 设置默认请求头
             conn.setRequestProperty("accept", "*/*");
             conn.setRequestProperty("connection", "Keep-Alive");
             conn.setRequestProperty("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64)");
             conn.setRequestProperty("Accept-Charset", "utf-8");
             conn.setRequestProperty("Content-Type", contentType);
+
+            // 添加自定义请求头
+            for (Map.Entry<String, String> entry : headers.entrySet()) {
+                conn.setRequestProperty(entry.getKey(), entry.getValue());
+            }
+
             conn.setDoOutput(true);
             conn.setDoInput(true);
             out = new PrintWriter(conn.getOutputStream());
@@ -168,19 +197,19 @@ public class HttpUtils
         }
         catch (ConnectException e)
         {
-            log.error("调用HttpUtils.sendPost ConnectException, url=" + url + ",param=" + param, e);
+            log.error("调用HttpUtils.doPost ConnectException, url=" + url + ",param=" + param, e);
         }
         catch (SocketTimeoutException e)
         {
-            log.error("调用HttpUtils.sendPost SocketTimeoutException, url=" + url + ",param=" + param, e);
+            log.error("调用HttpUtils.doPost SocketTimeoutException, url=" + url + ",param=" + param, e);
         }
         catch (IOException e)
         {
-            log.error("调用HttpUtils.sendPost IOException, url=" + url + ",param=" + param, e);
+            log.error("调用HttpUtils.doPost IOException, url=" + url + ",param=" + param, e);
         }
         catch (Exception e)
         {
-            log.error("调用HttpsUtil.sendPost Exception, url=" + url + ",param=" + param, e);
+            log.error("调用HttpsUtil.doPost Exception, url=" + url + ",param=" + param, e);
         }
         finally
         {
@@ -203,6 +232,7 @@ public class HttpUtils
         return result.toString();
     }
 
+    // ========== SSL POST 请求（原有逻辑保留） ==========
     public static String sendSSLPost(String url, String param)
     {
         return sendSSLPost(url, param, MediaType.APPLICATION_FORM_URLENCODED_VALUE);
@@ -263,6 +293,7 @@ public class HttpUtils
         return result.toString();
     }
 
+    // ========== 内部信任类（原有逻辑保留） ==========
     private static class TrustAnyTrustManager implements X509TrustManager
     {
         @Override
