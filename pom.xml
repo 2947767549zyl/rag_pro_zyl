@@ -244,6 +244,7 @@
         <module>thinglinks-common</module>
         <module>thinglinks-component</module>
         <module>thinglinks-business</module>
+        <module>thinglinks-app</module>
     </modules>
     <packaging>pom</packaging>
 
