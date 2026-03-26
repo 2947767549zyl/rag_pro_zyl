@@ -6,7 +6,7 @@ import com.alibaba.fastjson2.JSONObject;
 import com.thinglinks.app.config.BaiduApiConfig;
 import com.thinglinks.app.domain.BaiduTrackAnalysis;
 import com.thinglinks.app.service.BaiduTrackAnalysisService;
-import com.thinglinks.app.utils.HttpUtils;
+import com.thinglinks.app.utils.BaiDuHttpUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -68,7 +68,7 @@ public class BaiduTrackAnalysisServiceImpl implements BaiduTrackAnalysisService 
             log.info("请求百度 API 参数：ak={}, point_list={}", baiduApiConfig.getAk(), pointListJson);
 
             // 3. 发送 HTTP POST 请求（x-www-form-urlencoded 格式）
-            String responseJson = HttpUtils.postForm(
+            String responseJson = BaiDuHttpUtils.postForm(
                     BaiduApiConfig.ROAD_GRADE_API_URL,
                     requestParams
             );

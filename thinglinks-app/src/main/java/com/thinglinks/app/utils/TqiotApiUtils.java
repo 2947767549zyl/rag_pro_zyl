@@ -85,9 +85,6 @@ public class TqiotApiUtils {
         }
     }
 
-    /**
-     * 设备分页查询（使用配置类路径）
-     */
     public DevicePageResponse queryDevicePage(Long pageIndex, Long pageSize, DevicePageRequest.DeviceQueryData queryData) {
         try {
             // 参数校验
@@ -137,113 +134,27 @@ public class TqiotApiUtils {
         return queryDevicePage(1L, 10L, null);
     }
 
-    /**
-     * 获取设备详情（使用配置类路径）
-     */
-    public DeviceBasicDTO getDeviceDetail(String deviceId) {
+    // ---------------- 通用 GET 请求（抽成公共方法） ----------------
+    public <T> T doGet(String path, Class<T> clazz, String... headers) {
         try {
-            // 参数校验
-            if (deviceId == null || deviceId.trim().isEmpty()) {
-                throw new IllegalArgumentException("设备ID(deviceId)不能为空");
-            }
-
-            // 获取Token + 拼接地址（替换占位符）
             String token = getAccessToken();
-            String apiPath = tqiotConfig.getDeviceDetailPath().replace("{deviceId}", deviceId);
-            String url = tqiotConfig.getBaseUrl() + apiPath;
+            String url = tqiotConfig.getBaseUrl() + path;
 
-            // 发送GET请求
-            HttpUtils httpUtils = new HttpUtils();
-            httpUtils.addHeader("token", token);
-            httpUtils.addHeader("Content-Type", "application/json");
-            String responseStr = httpUtils.doGet(url);
+            HttpUtils http = new HttpUtils();
+            http.addHeader("token", token);
+            http.addHeader("Content-Type", "application/json");
 
-            // 4. 解析响应（核心改造：转换为DeviceBasicDTO）
-            DeviceBasicDTO responseDTO = JSONObject.parseObject(responseStr, DeviceBasicDTO.class);
-
-            // 5. 校验响应码（保持原有异常逻辑）
-            if (!"00000".equals(responseDTO.getCode())) {
-                throw new RuntimeException("获取设备详情失败：" + responseDTO.getMsg());
+            // 传入自定义 header：deviceId 等
+            if (headers != null && headers.length >= 2) {
+                for (int i = 0; i < headers.length; i += 2) {
+                    http.addHeader(headers[i], headers[i+1]);
+                }
             }
 
-            // 6. 返回完整DTO（也可按需仅返回data字段，看业务需求）
-            return responseDTO;
+            String resp = http.doGet(url);
+            return JSONObject.parseObject(resp, clazz);
         } catch (Exception e) {
-            throw new RuntimeException("调用设备详情接口异常：" + e.getMessage(), e);
-        }
-    }
-
-    /**
-     * @param deviceId 设备ID
-     * @return 设备状态信息JSON对象
-     */
-    public DeviceStatusDTO getDeviceStatus(String deviceId) {
-        try {
-            // 参数校验
-            if (deviceId == null || deviceId.trim().isEmpty()) {
-                throw new IllegalArgumentException("设备ID(deviceId)不能为空");
-            }
-
-            // 获取Token + 拼接地址（替换占位符）
-            String token = getAccessToken();
-            String apiPath = tqiotConfig.getDeviceStatusPath().replace("{deviceId}", deviceId);
-            String url = tqiotConfig.getBaseUrl() + apiPath;
-            System.out.println("设备状态请求地址：" + url);
-
-            // 发送GET请求
-            HttpUtils httpUtils = new HttpUtils();
-            httpUtils.addHeader("token", token);
-            httpUtils.addHeader("Content-Type", "application/json");
-            String responseStr = httpUtils.doGet(url);
-            System.out.println("设备状态接口响应：" + responseStr);
-
-            // 解析响应
-            DeviceStatusDTO responseDTO = JSONObject.parseObject(responseStr, DeviceStatusDTO.class);
-            if (!"00000".equals(responseDTO.getCode())) {
-                String msg = responseDTO.getMsg() == null ? "无错误信息" : responseDTO.getMsg();
-                String desc = responseDTO.getDesc() == null ? "无详细描述" : responseDTO.getDesc();
-                throw new RuntimeException("获取设备状态失败：" + msg + "，详细描述：" + desc);
-            }
-            return responseDTO;
-        } catch (Exception e) {
-            throw new RuntimeException("调用设备状态接口异常：" + e.getMessage(), e);
-        }
-    }
-
-    /**
-     * 获取设备属性信息（ICCID、车架号等）
-     */
-    public DeviceAttributeDTO getDeviceAttribute(String deviceId) {
-        try {
-            // 1. 参数校验
-            if (deviceId == null || deviceId.trim().isEmpty()) {
-                throw new IllegalArgumentException("设备ID(deviceId)不能为空");
-            }
-
-            // 2. 获取Token + 直接拼接URL
-            String token = getAccessToken();
-            String apiPath = tqiotConfig.getDeviceAttributePath().replace("{deviceId}", deviceId);
-            String url = tqiotConfig.getBaseUrl() + apiPath; // 直接拼接，无工具方法
-            System.out.println("设备属性请求地址：" + url);
-
-            // 3. 发送GET请求
-            HttpUtils httpUtils = new HttpUtils();
-            httpUtils.addHeader("token", token);
-            httpUtils.addHeader("Content-Type", "application/json");
-            String responseStr = httpUtils.doGet(url);
-            System.out.println("设备属性接口响应：" + responseStr);
-
-            // 4. 解析响应
-            DeviceAttributeDTO responseDTO = JSONObject.parseObject(responseStr, DeviceAttributeDTO.class);
-            if (!"00000".equals(responseDTO.getCode())) {
-                String msg = responseDTO.getMsg() == null ? "无错误信息" : responseDTO.getMsg();
-                String desc = responseDTO.getDesc() == null ? "无详细描述" : responseDTO.getDesc();
-                throw new RuntimeException("获取设备属性失败：" + msg + "，详细描述：" + desc);
-            }
-
-            return responseDTO;
-        } catch (Exception e) {
-            throw new RuntimeException("调用设备属性接口异常：" + e.getMessage(), e);
+            throw new RuntimeException("GET 请求失败：" + e.getMessage());
         }
     }
 }

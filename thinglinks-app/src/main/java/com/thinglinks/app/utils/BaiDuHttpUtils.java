@@ -21,7 +21,7 @@ import java.util.Map;
  * HTTP 工具类
  */
 @Slf4j
-public class HttpUtils {
+public class BaiDuHttpUtils {
 
     /**
      * 发送 POST 请求（JSON 格式）
