@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * App 测试接口
  */
+@Anonymous
 @RestController
 @RequestMapping("/app/test")
 public class AppTestController extends BaseController {

@@ -231,6 +231,11 @@
                 <artifactId>thinglinks-business</artifactId>
                 <version>${thinglinks.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.thinglinks</groupId>
+                <artifactId>thinglinks-app</artifactId>
+                <version>3.9.0</version>
+            </dependency>
 
         </dependencies>
     </dependencyManagement>

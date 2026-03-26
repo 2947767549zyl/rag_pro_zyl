@@ -134,3 +134,15 @@ xss:
   excludes: /system/notice
   # 匹配链接
   urlPatterns: /system/*,/monitor/*,/tool/*
+
+# ... existing code ...
+
+# 百度 API 配置
+baidu:
+  api:
+    # 百度地图开放平台的 AK（替换为你自己的 AK）
+    # 申请地址：https://lbsyun.baidu.com/apiconsole/key#/home
+    ak: C3DiVRBF69tTTMOJdrkYNvVLlrVJmETR
+    # SN（如果启用 SN 校验则配置，否则留空）
+    sn:
+

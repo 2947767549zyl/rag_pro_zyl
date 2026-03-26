@@ -344,9 +344,33 @@ export default {
     /** 查询部门下拉树结构 */
     getDeptTree() {
       deptTreeSelect().then(response => {
-        this.deptOptions = response.data
-        this.enabledDeptOptions = this.filterDisabledDept(JSON.parse(JSON.stringify(response.data)))
+        // 过滤掉不需要显示的部门（若以科技和深圳总公司）
+        const filteredData = this.filterUnwantedDept(response.data)
+        this.deptOptions = filteredData
+        this.enabledDeptOptions = this.filterDisabledDept(JSON.parse(JSON.stringify(filteredData)))
       })
+    },
+    // 过滤不需要显示的部门
+    filterUnwantedDept(deptList) {
+      const result = []
+      deptList.forEach(dept => {
+        // 如果是需要过滤的部门，只保留其子部门
+        if (dept.label === '若依科技' || dept.label === '深圳总公司' || dept.label === '长沙分公司') {
+          if (dept.children && dept.children.length) {
+            // 递归处理子部门
+            const filteredChildren = this.filterUnwantedDept(dept.children)
+            result.push(...filteredChildren)
+          }
+        } else {
+          // 不是需要过滤的部门，正常处理
+          const newDept = { ...dept }
+          if (newDept.children && newDept.children.length) {
+            newDept.children = this.filterUnwantedDept(newDept.children)
+          }
+          result.push(newDept)
+        }
+      })
+      return result
     },
     // 过滤禁用的部门
     filterDisabledDept(deptList) {
