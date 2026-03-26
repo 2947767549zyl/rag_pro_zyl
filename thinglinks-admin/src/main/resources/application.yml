@@ -146,3 +146,18 @@ baidu:
     # SN（如果启用 SN 校验则配置，否则留空）
     sn:
 
+# 途强智能平台配置
+tqiot:
+  base-url: https://openapi-ent.tqiot.com
+  username: admin483    # 替换为实际账号
+  password: test123    # 替换为实际密码
+  # AK/SK 认证信息
+  access-key: o483se1e32e235eee1f970470a3a6658dfdd5
+  access-secret: ba920ac9cbbdecbbd42153ae131a4c05  # 企业应用密钥SK
+  # Token有效期（秒，文档示例7200）
+  expires-second: 7200
+  token-url: /api/ent-manager/tenant/auth  # 【POST】获取平台认证Token的接口路径
+  device-page-path: /ent-openapi/api/ent-manager/tenant/v2/device/page # 【POST】设备分页查询接口路径
+  device-detail-path: /ent-openapi/api/ent-manager/tenant/v2/device/detail/get/{deviceId} # 【GET】获取设备基础详情接口路径（含{deviceId}占位符）
+  device-status-path: /ent-openapi/api/ent-manager/tenant/v2/device/status/get/{deviceId}  # 【GET】获取设备状态信息接口路径（含{deviceId}占位符，包含在线/运动/电量等状态）
+  device-attribute-path: /ent-openapi/api/ent-manager/tenant/v2/device/attribute/get/{deviceId}  # 【GET】获取设备属性信息接口路径（含{deviceId}占位符，包含ICCID/车架号等属性）

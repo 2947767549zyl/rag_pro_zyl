@@ -1,12 +1,12 @@
-package com.thinglinks.common.utils;
+package com.thinglinks.app.utils;
 
 import com.alibaba.fastjson2.JSONObject;
 import com.thinglinks.common.config.TqiotConfig;
-import com.thinglinks.common.core.domain.dto.DeviceAttributeDTO;
-import com.thinglinks.common.core.domain.dto.DeviceBasicDTO;
-import com.thinglinks.common.core.domain.dto.DeviceStatusDTO;
-import com.thinglinks.common.core.domain.dto.page.DevicePageRequest;
-import com.thinglinks.common.core.domain.dto.page.DevicePageResponse;
+import com.thinglinks.app.domain.dto.DeviceAttributeDTO;
+import com.thinglinks.app.domain.dto.DeviceBasicDTO;
+import com.thinglinks.app.domain.dto.DeviceStatusDTO;
+import com.thinglinks.app.domain.dto.page.DevicePageRequest;
+import com.thinglinks.app.domain.dto.page.DevicePageResponse;
 import com.thinglinks.common.utils.http.HttpUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

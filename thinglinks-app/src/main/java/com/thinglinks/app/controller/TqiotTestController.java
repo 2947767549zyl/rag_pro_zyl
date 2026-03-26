@@ -1,13 +1,13 @@
-package com.thinglinks.web.controller.system;
+package com.thinglinks.app.controller;
 
 import com.thinglinks.common.annotation.Anonymous;
 import com.thinglinks.common.config.TqiotConfig;
-import com.thinglinks.common.core.domain.dto.DeviceAttributeDTO;
-import com.thinglinks.common.core.domain.dto.DeviceBasicDTO;
-import com.thinglinks.common.core.domain.dto.DeviceStatusDTO;
-import com.thinglinks.common.core.domain.dto.page.DevicePageRequest;
-import com.thinglinks.common.core.domain.dto.page.DevicePageResponse;
-import com.thinglinks.common.utils.TqiotApiUtils;
+import com.thinglinks.app.domain.dto.DeviceAttributeDTO;
+import com.thinglinks.app.domain.dto.DeviceBasicDTO;
+import com.thinglinks.app.domain.dto.DeviceStatusDTO;
+import com.thinglinks.app.domain.dto.page.DevicePageRequest;
+import com.thinglinks.app.domain.dto.page.DevicePageResponse;
+import com.thinglinks.app.utils.TqiotApiUtils;
 import com.thinglinks.common.core.controller.BaseController;
 import com.thinglinks.common.core.domain.AjaxResult;
 import org.springframework.beans.factory.annotation.Autowired;

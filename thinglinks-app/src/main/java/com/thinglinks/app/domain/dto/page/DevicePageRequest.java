@@ -1,4 +1,4 @@
-package com.thinglinks.common.core.domain.dto.page;
+package com.thinglinks.app.domain.dto.page;
 
 import lombok.Data;
 import java.util.List;
