@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinglinks.system.mapper.TUbiRateMapper">
+    
+    <resultMap type="TUbiRate" id="TUbiRateResult">
+        <result property="id"    column="id"    />
+        <result property="carType"    column="car_type"    />
+        <result property="basePrice"    column="base_price"    />
+        <result property="maxPrice"    column="max_price"    />
+        <result property="minPrice"    column="min_price"    />
+        <result property="riskCoefficient"    column="risk_coefficient"    />
+        <result property="startTime"    column="start_time"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectTUbiRateVo">
+        select * from t_ubi_rate
+    </sql>
+
+    <select id="selectTUbiRateList" parameterType="TUbiRate" resultMap="TUbiRateResult">
+        <include refid="selectTUbiRateVo"/>
+        <where>  
+            <if test="carType != null  and carType != ''"> and car_type = #{carType}</if>
+            <if test="basePrice != null "> and base_price = #{basePrice}</if>
+            <if test="maxPrice != null "> and max_price = #{maxPrice}</if>
+            <if test="minPrice != null "> and min_price = #{minPrice}</if>
+            <if test="riskCoefficient != null "> and risk_coefficient = #{riskCoefficient}</if>
+            <if test="startTime != null "> and start_time = #{startTime}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+    
+    <select id="selectTUbiRateById" parameterType="Long" resultMap="TUbiRateResult">
+        <include refid="selectTUbiRateVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertTUbiRate" parameterType="TUbiRate" useGeneratedKeys="true" keyProperty="id">
+        insert into t_ubi_rate
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="carType != null">car_type,</if>
+            <if test="basePrice != null">base_price,</if>
+            <if test="maxPrice != null">max_price,</if>
+            <if test="minPrice != null">min_price,</if>
+            <if test="riskCoefficient != null">risk_coefficient,</if>
+            <if test="startTime != null">start_time,</if>
+            <if test="status != null">status,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="carType != null">#{carType},</if>
+            <if test="basePrice != null">#{basePrice},</if>
+            <if test="maxPrice != null">#{maxPrice},</if>
+            <if test="minPrice != null">#{minPrice},</if>
+            <if test="riskCoefficient != null">#{riskCoefficient},</if>
+            <if test="startTime != null">#{startTime},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTUbiRate" parameterType="TUbiRate">
+        update t_ubi_rate
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="carType != null">car_type = #{carType},</if>
+            <if test="basePrice != null">base_price = #{basePrice},</if>
+            <if test="maxPrice != null">max_price = #{maxPrice},</if>
+            <if test="minPrice != null">min_price = #{minPrice},</if>
+            <if test="riskCoefficient != null">risk_coefficient = #{riskCoefficient},</if>
+            <if test="startTime != null">start_time = #{startTime},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTUbiRateById" parameterType="Long">
+        delete from t_ubi_rate where id = #{id}
+    </delete>
+
+    <delete id="deleteTUbiRateByIds" parameterType="String">
+        delete from t_ubi_rate where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

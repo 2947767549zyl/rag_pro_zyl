@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinglinks.system.mapper.TParkRateMapper">
+    
+    <resultMap type="TParkRate" id="TParkRateResult">
+        <result property="id"    column="id"    />
+        <result property="parkName"    column="park_name"    />
+        <result property="freeTime"    column="free_time"    />
+        <result property="unitTime"    column="unit_time"    />
+        <result property="unitPrice"    column="unit_price"    />
+        <result property="dayMaxPrice"    column="day_max_price"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectTParkRateVo">
+        select * from t_park_rate
+    </sql>
+
+    <select id="selectTParkRateList" parameterType="TParkRate" resultMap="TParkRateResult">
+        <include refid="selectTParkRateVo"/>
+        <where>  
+            <if test="parkName != null  and parkName != ''"> and park_name like concat('%', #{parkName}, '%')</if>
+            <if test="freeTime != null "> and free_time = #{freeTime}</if>
+            <if test="unitTime != null "> and unit_time = #{unitTime}</if>
+            <if test="unitPrice != null "> and unit_price = #{unitPrice}</if>
+            <if test="dayMaxPrice != null "> and day_max_price = #{dayMaxPrice}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+    
+    <select id="selectTParkRateById" parameterType="Long" resultMap="TParkRateResult">
+        <include refid="selectTParkRateVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertTParkRate" parameterType="TParkRate" useGeneratedKeys="true" keyProperty="id">
+        insert into t_park_rate
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="parkName != null">park_name,</if>
+            <if test="freeTime != null">free_time,</if>
+            <if test="unitTime != null">unit_time,</if>
+            <if test="unitPrice != null">unit_price,</if>
+            <if test="dayMaxPrice != null">day_max_price,</if>
+            <if test="status != null">status,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="parkName != null">#{parkName},</if>
+            <if test="freeTime != null">#{freeTime},</if>
+            <if test="unitTime != null">#{unitTime},</if>
+            <if test="unitPrice != null">#{unitPrice},</if>
+            <if test="dayMaxPrice != null">#{dayMaxPrice},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTParkRate" parameterType="TParkRate">
+        update t_park_rate
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="parkName != null">park_name = #{parkName},</if>
+            <if test="freeTime != null">free_time = #{freeTime},</if>
+            <if test="unitTime != null">unit_time = #{unitTime},</if>
+            <if test="unitPrice != null">unit_price = #{unitPrice},</if>
+            <if test="dayMaxPrice != null">day_max_price = #{dayMaxPrice},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTParkRateById" parameterType="Long">
+        delete from t_park_rate where id = #{id}
+    </delete>
+
+    <delete id="deleteTParkRateByIds" parameterType="String">
+        delete from t_park_rate where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

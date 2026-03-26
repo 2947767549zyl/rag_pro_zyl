@@ -36,7 +36,7 @@
         <spring-security.version>5.7.14</spring-security.version>
         <spring-framework.version>5.3.39</spring-framework.version>
     </properties>
-
+    <!-- 依赖声明 -->
     <!-- 依赖声明 -->
     <dependencyManagement>
         <dependencies>
@@ -231,6 +231,11 @@
                 <artifactId>thinglinks-business</artifactId>
                 <version>${thinglinks.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.thinglinks</groupId>
+                <artifactId>thinglinks-app</artifactId>
+                <version>3.9.0</version>
+            </dependency>
 
         </dependencies>
     </dependencyManagement>
@@ -244,6 +249,7 @@
         <module>thinglinks-common</module>
         <module>thinglinks-component</module>
         <module>thinglinks-business</module>
+        <module>thinglinks-app</module>
     </modules>
     <packaging>pom</packaging>
 

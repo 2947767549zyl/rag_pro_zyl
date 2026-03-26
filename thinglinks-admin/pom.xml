@@ -66,6 +66,11 @@
             <groupId>com.thinglinks</groupId>
             <artifactId>thinglinks-component</artifactId>
         </dependency>
+        <!-- App 接口模块-->
+        <dependency>
+            <groupId>com.thinglinks</groupId>
+            <artifactId>thinglinks-app</artifactId>
+        </dependency>
 
         <!-- 业务模块-->
         <dependency>
