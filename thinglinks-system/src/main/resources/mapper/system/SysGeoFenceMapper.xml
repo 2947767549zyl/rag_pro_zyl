@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinglinks.system.mapper.SysGeoFenceMapper">
+
+    <resultMap type="SysGeoFence" id="SysGeoFenceResult">
+        <result property="id" column="id" />
+        <result property="fenceName" column="fence_name" />
+        <result property="fenceType" column="fence_type" />
+        <result property="coordinates" column="coordinates" />
+        <result property="areaCode" column="area_code" />
+        <result property="chargeRuleId" column="charge_rule_id" />
+        <result property="status" column="status" />
+        <result property="createBy" column="create_by" />
+        <result property="createTime" column="create_time" />
+        <result property="updateBy" column="update_by" />
+        <result property="updateTime" column="update_time" />
+        <result property="remark" column="remark" />
+    </resultMap>
+
+    <sql id="selectSysGeoFenceVo">
+        select id, fence_name, fence_type, coordinates, area_code, charge_rule_id, status, create_by, create_time, update_by, update_time, remark from sys_geofence
+    </sql>
+
+    <select id="selectSysGeoFenceList" parameterType="SysGeoFence" resultMap="SysGeoFenceResult">
+        <include refid="selectSysGeoFenceVo"/>
+        <where>
+            <if test="fenceName != null and fenceName != ''"> and fence_name like concat('%', #{fenceName}, '%')</if>
+            <if test="fenceType != null and fenceType != ''"> and fence_type = #{fenceType}</if>
+            <if test="status != null and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+
+    <select id="selectSysGeoFenceById" parameterType="Long" resultMap="SysGeoFenceResult">
+        <include refid="selectSysGeoFenceVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertSysGeoFence" parameterType="SysGeoFence" useGeneratedKeys="true" keyProperty="id">
+        insert into sys_geoFence
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="fenceName != null and fenceName != ''">fence_name,</if>
+            <if test="fenceType != null">fence_type,</if>
+            <if test="coordinates != null">coordinates,</if>
+            <if test="areaCode != null">area_code,</if>
+            <if test="chargeRuleId != null">charge_rule_id,</if>
+            <if test="status != null">status,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="remark != null">remark,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="fenceName != null and fenceName != ''">#{fenceName},</if>
+            <if test="fenceType != null">#{fenceType},</if>
+            <if test="coordinates != null">#{coordinates},</if>
+            <if test="areaCode != null">#{areaCode},</if>
+            <if test="chargeRuleId != null">#{chargeRuleId},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="remark != null">#{remark},</if>
+        </trim>
+    </insert>
+
+    <update id="updateSysGeoFence" parameterType="SysGeoFence">
+        update sys_geofence
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="fenceName != null and fenceName != ''">fence_name = #{fenceName},</if>
+            <if test="fenceType != null">fence_type = #{fenceType},</if>
+            <if test="coordinates != null">coordinates = #{coordinates},</if>
+            <if test="areaCode != null">area_code = #{areaCode},</if>
+            <if test="chargeRuleId != null">charge_rule_id = #{chargeRuleId},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteSysGeoFenceByIds" parameterType="String">
+        delete from sys_geofence where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
